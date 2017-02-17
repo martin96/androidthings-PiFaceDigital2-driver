@@ -44,6 +44,10 @@ public class MainActivity extends Activity {
 			mPiFaceDigital2.setLED(5, false);
 			mPiFaceDigital2.setLED(6, true);
 			mPiFaceDigital2.setLED(7, false);
+
+			mPiFaceDigital2.setRelay(2, true);
+
+			mPiFaceDigital2.setOutputPin(4, false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

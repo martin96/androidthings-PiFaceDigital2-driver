@@ -128,20 +128,6 @@ public class PiFaceDigital2 implements AutoCloseable {
 		startSpiDevice();
 	}
 
-	private byte readSpiDevice(byte address) throws IOException {
-		if (mSpiDevice != null) {
-			writeBuffer3[0] = BaseAddRead;
-			writeBuffer3[1] = address;
-			writeBuffer3[2] = 0;
-			mSpiDevice.transfer(writeBuffer3, readBuffer3, writeBuffer3.length);
-
-			Timber.d("readSpiDevice - " + bytesToHex(readBuffer3));
-
-			return readBuffer3[2];
-		}
-		return 0;
-	}
-
 	private void startSpiDevice() throws IOException {
 		writeSpiDevice(IOCONA, (byte) 0x28); // 28, 18 or 08, not sure about the difference
 
@@ -162,6 +148,29 @@ public class PiFaceDigital2 implements AutoCloseable {
 		mRunnable.run();
 	}
 
+	private void writeSpiDevice(byte address, byte data) throws IOException {
+		if (mSpiDevice != null) {
+			writeBuffer3[0] = BaseAddWrite;
+			writeBuffer3[1] = address;
+			writeBuffer3[2] = data;
+			mSpiDevice.write(writeBuffer3, writeBuffer3.length);
+		}
+	}
+
+	private byte readSpiDevice(byte address) throws IOException {
+		if (mSpiDevice != null) {
+			writeBuffer3[0] = BaseAddRead;
+			writeBuffer3[1] = address;
+			writeBuffer3[2] = 0;
+			mSpiDevice.transfer(writeBuffer3, readBuffer3, writeBuffer3.length);
+
+			Timber.d("readSpiDevice - " + bytesToHex(readBuffer3));
+
+			return readBuffer3[2];
+		}
+		return 0;
+	}
+
 	private static String bytesToHex(byte[] bytes) {
 		char[] hexChars = new char[bytes.length * 2];
 		for (int j = 0; j < bytes.length; j++) {
@@ -170,15 +179,6 @@ public class PiFaceDigital2 implements AutoCloseable {
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 		}
 		return new String(hexChars);
-	}
-
-	private void writeSpiDevice(byte address, byte data) throws IOException {
-		if (mSpiDevice != null) {
-			writeBuffer3[0] = BaseAddWrite;
-			writeBuffer3[1] = address;
-			writeBuffer3[2] = data;
-			mSpiDevice.write(writeBuffer3, writeBuffer3.length);
-		}
 	}
 
 	/**
@@ -200,21 +200,41 @@ public class PiFaceDigital2 implements AutoCloseable {
 	 * Turn on or off LED on specific position.
 	 *
 	 * @param position Position of the LED, value must be between 0 and 7
-	 * @param onOrOff  True to turn on, False to turn off
+	 * @param onOff    True to turn on, false to turn off
 	 */
-	public void setLED(int position, boolean onOrOff) {
-		try {
-			byte LEDs = readSpiDevice(GPIOA);
+	public void setLED(int position, boolean onOff) {
+		setOutputPin(position, onOff);
+	}
 
-			if (onOrOff) {
-				LEDs = (byte) (LEDs | (1 << position));
-			} else {
-				LEDs = (byte) (LEDs & ~(1 << position));
+	/**
+	 * @param position Position of the output pin, value must be between 0 and 7
+	 * @param onOff    True to turn on, false to turn off
+	 */
+	public void setOutputPin(int position, boolean onOff) {
+		if (position > 7 || position < 0) {
+			Timber.e(position + " is not a valid output pin / LED position");
+		} else {
+			try {
+				byte LEDs = readSpiDevice(GPIOA);
+
+				if (onOff) {
+					LEDs = (byte) (LEDs | (1 << position));
+				} else {
+					LEDs = (byte) (LEDs & ~(1 << position));
+				}
+
+				writeSpiDevice(GPIOA, LEDs);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+		}
+	}
 
-			writeSpiDevice(GPIOA, LEDs);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void setRelay(int position, boolean onOff) {
+		if (position > 1 || position < 0) {
+			Timber.e(position + " is not a valid relay position");
+		} else {
+			setOutputPin(position, onOff);
 		}
 	}
 
