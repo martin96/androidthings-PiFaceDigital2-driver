@@ -5,6 +5,8 @@ Only tested with a Raspberry Pi 3, but shouldn't be hard to adapt for other boar
 
 ## PiFace Digital 2
 
+![Image of PiFace Digital 2](https://www.element14.com/community/dtss-images/uploads/devtool/image/large/PiFace+Digital+2+for+Raspberry+Pi+5511ec19dca72.png)
+
 PiFace Digital has eight inputs, eight outputs, eight LED’s, two relays and four switches.
 
 ## Using
