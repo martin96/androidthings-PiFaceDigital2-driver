@@ -1,6 +1,7 @@
-package com.martingregor.pifacedigitaldriver;
+package gregor.martin.driver.PiFaceDigital2;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.GpioCallback;
@@ -9,13 +10,12 @@ import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
 
-import timber.log.Timber;
-
 /**
  * Device driver for MCP23S17 chip on PiFace Digital 2
  */
 
 public class PiFaceDigital2 implements AutoCloseable {
+	private static final String TAG          = PiFaceDigital2.class.getSimpleName();
 	private static final String GPIO_PORT    = "BCM25";
 	private static final char[] hexArray     = "0123456789ABCDEF".toCharArray();
 	private static final byte   IODIRA       = 0x00;
@@ -55,7 +55,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 	private GpioCallback mGpioCallback = new GpioCallback() {
 		@Override
 		public boolean onGpioEdge(Gpio gpio) {
-			Timber.i("Interrupt occurred");
+			Log.i(TAG, "Interrupt occurred");
 
 			try {
 				readSpiDevice(INTFB);
@@ -94,7 +94,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 
 		@Override
 		public void onGpioError(Gpio gpio, int error) {
-			Timber.w(gpio + ": Error event " + error);
+			Log.w(TAG, gpio + ": Error event " + error);
 		}
 	};
 
@@ -164,7 +164,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 			writeBuffer3[2] = 0;
 			mSpiDevice.transfer(writeBuffer3, readBuffer3, writeBuffer3.length);
 
-			Timber.d("readSpiDevice - " + bytesToHex(readBuffer3));
+			Log.d(TAG, "readSpiDevice - " + bytesToHex(readBuffer3));
 
 			return readBuffer3[2];
 		}
@@ -212,7 +212,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 	 */
 	public void setOutputPin(int position, boolean onOff) {
 		if (position > 7 || position < 0) {
-			Timber.e(position + " is not a valid output pin / LED position");
+			Log.e(TAG, position + " is not a valid output pin / LED position");
 		} else {
 			try {
 				byte LEDs = readSpiDevice(GPIOA);
@@ -232,7 +232,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 
 	public void setRelay(int position, boolean onOff) {
 		if (position > 1 || position < 0) {
-			Timber.e(position + " is not a valid relay position");
+			Log.e(TAG, position + " is not a valid relay position");
 		} else {
 			setOutputPin(position, onOff);
 		}

@@ -21,11 +21,10 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
+import gregor.martin.driver.PiFaceDigital2.PiFaceDigital2;
 import timber.log.Timber;
 
 public class MainActivity extends Activity {
-	private static final String SPI_DEVICE_NAME = "SPI0.0";
-
 	private PiFaceDigital2 mPiFaceDigital2;
 
 	@Override
@@ -34,7 +33,7 @@ public class MainActivity extends Activity {
 		Timber.d("onCreate");
 
 		try {
-			mPiFaceDigital2 = PiFaceDigital2.create(SPI_DEVICE_NAME);
+			mPiFaceDigital2 = PiFaceDigital2.create(BoardDefaults.getSPIPort());
 
 			mPiFaceDigital2.setLED(0, true);
 			mPiFaceDigital2.setLED(1, false);
@@ -45,9 +44,9 @@ public class MainActivity extends Activity {
 			mPiFaceDigital2.setLED(6, true);
 			mPiFaceDigital2.setLED(7, false);
 
-			mPiFaceDigital2.setRelay(2, true);
+			mPiFaceDigital2.setRelay(0, true);
 
-			mPiFaceDigital2.setOutputPin(4, false);
+			mPiFaceDigital2.setOutputPin(1, false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +54,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		Timber.d("onDestroy");
 
 		try {
@@ -63,5 +61,7 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		super.onDestroy();
 	}
 }
