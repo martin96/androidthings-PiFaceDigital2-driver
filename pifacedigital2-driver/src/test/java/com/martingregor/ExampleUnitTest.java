@@ -1,4 +1,4 @@
-package gregor.martin.driver.PiFaceDigital2;
+package com.martingregor;
 
 import org.junit.Test;
 

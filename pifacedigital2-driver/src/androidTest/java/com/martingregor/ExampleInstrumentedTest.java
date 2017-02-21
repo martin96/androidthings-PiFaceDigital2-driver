@@ -1,4 +1,4 @@
-package gregor.martin.driver.PiFaceDigital2;
+package com.martingregor;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

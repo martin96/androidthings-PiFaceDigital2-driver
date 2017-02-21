@@ -1,4 +1,4 @@
-package gregor.martin.driver.PiFaceDigital2;
+package com.martingregor;
 
 import android.os.Handler;
 import android.util.Log;
@@ -207,6 +207,8 @@ public class PiFaceDigital2 implements AutoCloseable {
 	}
 
 	/**
+	 * Set output pin on specific position on or off.
+	 *
 	 * @param position Position of the output pin, value must be between 0 and 7
 	 * @param onOff    True to turn on, false to turn off
 	 */
@@ -230,6 +232,12 @@ public class PiFaceDigital2 implements AutoCloseable {
 		}
 	}
 
+	/**
+	 * Turn on or off relay on specific position.
+	 *
+	 * @param position Position of the relay, value must be either 0 or 1
+	 * @param onOff    True to turn on, false to turn off
+	 */
 	public void setRelay(int position, boolean onOff) {
 		if (position > 1 || position < 0) {
 			Log.e(TAG, position + " is not a valid relay position");

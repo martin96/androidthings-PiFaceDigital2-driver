@@ -19,9 +19,10 @@ package com.martingregor.pifacedigitaldriver;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.martingregor.PiFaceDigital2;
+
 import java.io.IOException;
 
-import gregor.martin.driver.PiFaceDigital2.PiFaceDigital2;
 import timber.log.Timber;
 
 public class MainActivity extends Activity {
