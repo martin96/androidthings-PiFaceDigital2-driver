@@ -40,8 +40,8 @@ public class PiFaceDigital2 implements AutoCloseable {
 	private static final byte   GPIOB        = 0x13;
 	private static final byte   OLATA        = 0x14;
 	private static final byte   OLATB        = 0x15;
-	private static final byte   BaseAddWrite = 0x40;
-	private static final byte   BaseAddRead  = 0x41;
+	private static final byte   BaseAddressWrite = 0x40;
+	private static final byte   BaseAddressRead  = 0x41;
 
 	private static byte[] readBuffer3  = new byte[3];
 	private static byte[] writeBuffer3 = new byte[3];
@@ -98,7 +98,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 		}
 	};
 
-	private PiFaceDigital2(SpiDevice spiDevice, Gpio gpio) throws IOException {
+	PiFaceDigital2(SpiDevice spiDevice, Gpio gpio) throws IOException {
 		mGpio = gpio; // This pin is for detecting changes on output ports
 		mGpio.setDirection(Gpio.DIRECTION_IN);
 		mGpio.setActiveType(Gpio.ACTIVE_LOW);
@@ -150,7 +150,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 
 	private void writeSpiDevice(byte address, byte data) throws IOException {
 		if (mSpiDevice != null) {
-			writeBuffer3[0] = BaseAddWrite;
+			writeBuffer3[0] = BaseAddressWrite;
 			writeBuffer3[1] = address;
 			writeBuffer3[2] = data;
 			mSpiDevice.write(writeBuffer3, writeBuffer3.length);
@@ -159,7 +159,7 @@ public class PiFaceDigital2 implements AutoCloseable {
 
 	private byte readSpiDevice(byte address) throws IOException {
 		if (mSpiDevice != null) {
-			writeBuffer3[0] = BaseAddRead;
+			writeBuffer3[0] = BaseAddressRead;
 			writeBuffer3[1] = address;
 			writeBuffer3[2] = 0;
 			mSpiDevice.transfer(writeBuffer3, readBuffer3, writeBuffer3.length);

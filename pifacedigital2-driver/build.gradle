@@ -5,7 +5,7 @@ ext {
     bintrayName = 'pifacedigital2-driver'
 
     publishedGroupId = 'com.martingregor'
-    libraryName = 'PiFace Digital2 Driver'
+    libraryName = 'PiFace Digital 2 Driver'
     artifact = 'pifacedigital2-driver'
 
     libraryDescription = 'Driver to control the MCP23S17 chip on the PiFace Digital 2'
@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/martin96/androidthings-PiFaceDigital2-driver'
     gitUrl = 'https://github.com/martin96/androidthings-PiFaceDigital2-driver.git'
 
-    libraryVersion = '0.0.1'
+    libraryVersion = '0.1'
 
     developerId = 'martingregor96'
     developerName = 'Martin Gregor'

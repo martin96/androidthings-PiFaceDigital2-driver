@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
 
 		try {
 			mPiFaceDigital2 = PiFaceDigital2.create(BoardDefaults.getSPIPort());
+			//mPiFaceDigital2.startDevice();
 
 			mPiFaceDigital2.setLED(0, true);
 			mPiFaceDigital2.setLED(1, false);
